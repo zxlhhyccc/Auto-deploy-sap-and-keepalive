@@ -12,7 +12,7 @@
 
 1. Fork本仓库
 
-2：在Actions菜单允许 `I understand my workflows, go ahead and enable them` 按钮
+2. 在Actions菜单允许 `I understand my workflows, go ahead and enable them` 按钮
 
 3. 在 GitHub 仓库中设置以下 secrets（Settings → Secrets and variables → Actions → New repository secret）：
 - `EMAIL`: Cloud Foundry账户邮箱
