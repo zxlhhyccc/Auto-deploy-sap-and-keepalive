@@ -5,9 +5,6 @@ on:
     - cron: '15 0 * * *'     # 每天 UTC 时间 00:15 运行（北京时间 08:15）
   workflow_dispatch:  # 允许手动触发
 
-env:
-  MEMORY: 1024M
-
 jobs:
   restart-sg-apps:
     runs-on: ubuntu-latest
