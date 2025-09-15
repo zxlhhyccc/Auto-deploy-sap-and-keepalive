@@ -45,7 +45,7 @@
 * 点击绿色的"Run workflow"按钮开始部署
 
 6. **获取节点信息**
-点开运行的actions，点击Deploy application，找到routes: 后面的域名
+* 点开运行的actions，点击Deploy application，找到routes: 后面的域名
 * 订阅： 域名/$SUB_PATH    SUB_PATH变量没设置默认是sub  即订阅为：域名/sub
 
 ## 注意事项
