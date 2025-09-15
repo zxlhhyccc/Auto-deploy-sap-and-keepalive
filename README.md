@@ -42,6 +42,7 @@
       - environment: 选择部署环境（staging/production）
       - region: 选择部署区域（ap21/us10/eu10）
       - app_name: （可选）指定应用名称
+
    4: 点击绿色的"Run workflow"按钮开始部署
 
 ## 注意事项
