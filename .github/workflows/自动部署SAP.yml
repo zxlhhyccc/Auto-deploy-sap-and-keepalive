@@ -26,7 +26,7 @@ on:
 
 env:
   DOCKER_IMAGE: ghcr.io/eooce/nodejs:main
-  MEMORY: 1024M
+  MEMORY: 512M
 
 jobs:
   deploy:
