@@ -48,6 +48,11 @@
 * 点开运行的actions，点击Deploy application，找到routes: 后面的域名
 * 订阅： 域名/$SUB_PATH    SUB_PATH变量没设置默认是sub  即订阅为：域名/sub
 
+
+## 保活 
+* actions保活可能存在时间误差，建议根据前两天的情况进行适当调整`自动保活SAP.yml`里的cron时间
+* 推荐使用keep.sh在vps或nat小鸡上精准保活，下载keep.sh文件到本地或vps上，在开头添加必要的环境变量和保活url然后执行`bash keep.sh`即可
+
 ## 注意事项
 
 1. 确保所有必需的GitHub Secrets已正确配置
