@@ -36,14 +36,13 @@
      - CFPORT(优选域名或优选ip对应端口)
 
 5. **开始部署**
-   1: 在GitHub仓库的Actions页面找到"Deploy to SAP Cloud"工作流
-   2: 点击"Run workflow"按钮
-   3: 根据需要选择或填写以下参数：
-      - environment: 选择部署环境（staging/production）
-      - region: 选择部署区域（ap21/us10/eu10）
-      - app_name: （可选）指定应用名称
-
-   4: 点击绿色的"Run workflow"按钮开始部署
+* 在GitHub仓库的Actions页面找到"Deploy to SAP Cloud"工作流
+* 点击"Run workflow"按钮
+* 根据需要选择或填写以下参数：
+   - environment: 选择部署环境（staging/production）
+   - region: 选择部署区域（ap21/us10/eu10）
+   - app_name: （可选）指定应用名称
+* 点击绿色的"Run workflow"按钮开始部署
 
 ## 注意事项
 
