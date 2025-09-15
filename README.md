@@ -12,14 +12,16 @@
 
 1. Fork本仓库
 
-2. 在 GitHub 仓库中设置以下 secrets（Settings → Secrets and variables → Actions → New repository secret）：
+2：在Actions菜单允许 `I understand my workflows, go ahead and enable them` 按钮
+
+3. 在 GitHub 仓库中设置以下 secrets（Settings → Secrets and variables → Actions → New repository secret）：
 - `EMAIL`: Cloud Foundry账户邮箱
 - `PASSWORD`: Cloud Foundry账户密码
 - `SG_ORG`: 新加坡组织名称
 - `US_ORG`: 美国组织名称
 - `SPACE`: Cloud Foundry空间名称
 
-3. **设置Docker容器环境变量**
+4. **设置Docker容器环境变量**
    - 使用固定隧道token部署，请在cloudflare里设置端口为8001：
    - 设置基础环境变量：
      - UUID(节点uuid)
@@ -33,7 +35,7 @@
      - CFIP(优选域名或优选ip)
      - CFPORT(优选域名或优选ip对应端口)
 
-4. **开始部署**
+5. **开始部署**
    1: 在GitHub仓库的Actions页面找到"Deploy to SAP Cloud"工作流
    2: 点击"Run workflow"按钮
    3: 根据需要选择或填写以下参数：
