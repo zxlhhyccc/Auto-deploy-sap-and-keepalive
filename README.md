@@ -6,7 +6,7 @@
 
 ### 前置要求
 * GitHub 账户：需要有一个 GitHub 账户来创建仓库和设置工作流
-* SAP Cloud Foundry 账户：需要有 SAP Cloud Foundry 的有效账户
+* SAP Cloud Foundry 账户：需要有 SAP Cloud Foundry 的有效账户,点此注册：https://www.sap.com
 
 ## 部署步骤
 
@@ -21,7 +21,7 @@
 - `US_ORG`: 美国组织名称
 - `SPACE`: Cloud Foundry空间名称
 
-4. **设置Docker容器环境变量**
+4. **设置Docker容器环境变量(也是在secrets里设置)**
    - 使用固定隧道token部署，请在cloudflare里设置端口为8001：
    - 设置基础环境变量：
      - UUID(节点uuid)
@@ -40,7 +40,7 @@
 * 点击"Run workflow"按钮
 * 根据需要选择或填写以下参数：
    - environment: 选择部署环境（staging/production）
-   - region: 选择部署区域（ap21/us10/eu10）
+   - region: 选择部署区域（SG/US）
    - app_name: （可选）指定应用名称
 * 点击绿色的"Run workflow"按钮开始部署
 
@@ -56,5 +56,5 @@
 ## 注意事项
 
 1. 确保所有必需的GitHub Secrets已正确配置
-2. Docker镜像必须可访问且包含正确的应用代码
-4. 部署完成后会显示应用状态信息
+2. 多区域部署需先开通权限，确保US区域有内存
+4. 建议设置SUB_PATH订阅token,防止节点泄露
