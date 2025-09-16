@@ -2,7 +2,7 @@ name: 自动保活 SAP
 
 on:
   schedule:
-    - cron: '15 0 * * *'     # 每天 UTC 时间 00:15 运行（北京时间 08:15）
+    - cron: '30 22 * * *'     # actions时间不准，不准确再酌情调整
   workflow_dispatch:  # 允许手动触发
 
 jobs:
