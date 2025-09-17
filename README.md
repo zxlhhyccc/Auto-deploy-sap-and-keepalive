@@ -26,7 +26,7 @@
 4. **设置Docker容器环境变量(也是在secrets里设置)**
    - 使用固定隧道token部署，请在cloudflare里设置端口为8001：
    - 设置基础环境变量：
-     - UUID(节点uuid)
+     - UUID(节点uuid),如果开启了哪吒v1,部署完一个之后一定要修改UUID,否则agnet会被覆盖
      - ARGO_DOMAIN(固定隧道域名,未设置将使用临时隧道)
      - ARGO_AUTH(固定隧道json或token,未设置将使用临时隧道)
      - SUB_PATH(订阅token,未设置默认是sub)
