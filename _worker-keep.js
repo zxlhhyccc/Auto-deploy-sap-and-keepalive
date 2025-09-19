@@ -657,7 +657,7 @@ export default {
       }
       
       // 诊断端点
-      if (url.pathname === "/diag") {
+      if (url.pathname === "/check") {
         return json({
           ok: true,
           monitoredApps: MONITORED_APPS,
