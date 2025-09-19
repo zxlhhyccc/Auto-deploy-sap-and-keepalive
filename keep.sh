@@ -29,38 +29,47 @@ install_cf_cli() {
     fi
     
     yellow "未检测到SAP CLI，开始安装..."
-    
+
     # 检测系统架构
     ARCH=$(uname -m)
     case $ARCH in
         x86_64|amd64)
-            CF_PACKAGE="cf8-cli-installer_8.14.1_x86-64.deb"
+            ARCH_TYPE="x86-64"
             ;;
         aarch64|arm64)
-            CF_PACKAGE="cf8-cli-installer_8.14.1_arm64.deb"
+            ARCH_TYPE="arm64"
             ;;
         *)
             red "不支持的架构: $ARCH"
             exit 1
             ;;
     esac
-    
-    # 下载并安装
-    DOWNLOAD_URL="https://github.com/cloudfoundry/cli/releases/latest/download/$CF_PACKAGE"
-    
-    # Alpine使用apk安装必要的依赖
+
+    # 获取 GitHub 上最新的 CF CLI 版本号 (带 v 的)
+    LATEST_TAG=$(curl -s https://api.github.com/repos/cloudfoundry/cli/releases/latest \
+        | grep tag_name | cut -d '"' -f 4)
+
+    # 去掉 v，得到纯版本号
+    LATEST_VERSION=${LATEST_TAG#v}
+
+    # 拼接下载包名和 URL
+    CF_PACKAGE="cf8-cli-installer_${LATEST_VERSION}_${ARCH_TYPE}.deb"
+    DOWNLOAD_URL="https://github.com/cloudfoundry/cli/releases/download/${LATEST_TAG}/${CF_PACKAGE}"
+
+    # Alpine 使用 apk
     if command -v apk >/dev/null 2>&1; then
-        apk add --no-cache ca-certificates
-        apk add --no-cache wget
+        apk add --no-cache ca-certificates wget
         wget -O /tmp/cf-cli.deb "$DOWNLOAD_URL"
         apk add --no-cache --virtual .cf-deps dpkg
         dpkg -x /tmp/cf-cli.deb /tmp/cf-cli
         cp /tmp/cf-cli/usr/bin/cf /usr/local/bin/
         apk del .cf-deps
         rm -rf /tmp/cf-cli.deb /tmp/cf-cli
+
+    # Debian/Ubuntu 使用 apt
     elif command -v apt >/dev/null 2>&1; then
-        apt-get update
-        apt-get install -y wget
+        DEBIAN_FRONTEND=noninteractive apt-get update
+        DEBIAN_FRONTEND=noninteractive apt-get install -y wget
         wget -O /tmp/cf-cli.deb "$DOWNLOAD_URL"
         dpkg -i /tmp/cf-cli.deb || apt-get install -f -y
         rm /tmp/cf-cli.deb
