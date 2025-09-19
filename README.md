@@ -52,8 +52,24 @@
 
 
 ## 保活 
+### vps或NAT小鸡保活
+- 推荐使用keep.sh在vps或nat小鸡上精准保活，下载keep.sh文件到本地或vps上，在开头添加必要的环境变量和保活url然后执行`bash keep.sh`即可
+1. 下载文件到vps或本地
+```bash
+wget https://raw.githubusercontent.com/eooce/Auto-deploy-sap-and-keepalive/refs/heads/main/keep.sh && chmod +x keep.sh
+```
+2. 修改keep.sh开头4-11行中的变量和保活url
+3. `bash keep.sh`运行即可
+--
+### Github Actions保活
 * actions保活可能存在时间误差，建议根据前两天的情况进行适当调整`自动保活SAP.yml`里的cron时间
-* 推荐使用keep.sh在vps或nat小鸡上精准保活，下载keep.sh文件到本地或vps上，在开头添加必要的环境变量和保活url然后执行`bash keep.sh`即可
+--
+### Github Actions保活
+1. 登录你的账户 [Cloudflare Dashboard](https://dash.cloudflare.com)
+2. 点击 `Workers and pages`创建一个workers，编辑代码，全选`_worker-keep.js`文件里的代码粘贴到workers中
+3. 在开头添加登录email和登录密码(telegram通知配置可选)、项目URL和项目名称，右上角点击部署
+4. 部署成功后返回到该worker设置中选择添加触发事件，添加cron触发器--cron表达式，设置为：`*/2 0 * * *` 保存，意思是北京时间早上8-9点没2分钟检查一次
+
 
 ## 注意事项
 
