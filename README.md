@@ -60,10 +60,12 @@ wget https://raw.githubusercontent.com/eooce/Auto-deploy-sap-and-keepalive/refs/
 ```
 2. 修改keep.sh开头4-11行中的变量和保活url
 3. `bash keep.sh`运行即可
---
+
+
 ### Github Actions保活
 * actions保活可能存在时间误差，建议根据前两天的情况进行适当调整`自动保活SAP.yml`里的cron时间
---
+
+
 ### Github Actions保活
 1. 登录你的账户 [Cloudflare Dashboard](https://dash.cloudflare.com)
 2. 点击 `Workers and pages`创建一个workers，编辑代码，全选`_worker-keep.js`文件里的代码粘贴到workers中
