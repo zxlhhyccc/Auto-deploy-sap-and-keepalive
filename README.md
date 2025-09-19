@@ -70,7 +70,7 @@ wget https://raw.githubusercontent.com/eooce/Auto-deploy-sap-and-keepalive/refs/
 1. 登录你的账户 [Cloudflare Dashboard](https://dash.cloudflare.com)
 2. 点击 `Workers and pages`创建一个workers，编辑代码，全选`_worker-keep.js`文件里的代码粘贴到workers中
 3. 在开头添加登录email和登录密码(telegram通知配置可选)、项目URL和项目名称，右上角点击部署
-4. 部署成功后返回到该worker设置中选择添加触发事件，添加cron触发器--cron表达式，设置为：`*/2 0 * * *` 保存，意思是北京时间早上8-9点没2分钟检查一次
+4. 部署成功后返回到该worker设置中选择添加触发事件，添加cron触发器--cron表达式，设置为：`*/2 0 * * *` 保存，意思是北京时间早上8-9点每2分钟检查一次
 
 
 ## 注意事项
