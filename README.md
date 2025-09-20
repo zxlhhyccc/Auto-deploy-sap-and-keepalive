@@ -25,15 +25,15 @@
    - 使用固定隧道token部署，请在cloudflare里设置端口为8001：
    - 设置基础环境变量：
      - UUID(节点uuid),如果开启了哪吒v1,部署完一个之后一定要修改UUID,否则agnet会被覆盖
-     - ARGO_DOMAIN(固定隧道域名,未设置将使用临时隧道)
-     - ARGO_AUTH(固定隧道json或token,未设置将使用临时隧道)
+     - ARGO_DOMAIN(固定隧道域名,未设置将使用临时隧道),使用直连镜像时没有此变量
+     - ARGO_AUTH(固定隧道json或token,未设置将使用临时隧道),使用直连镜像时没有此变量
      - SUB_PATH(订阅token,未设置默认是sub)
    - 可选环境变量
      - NEZHA_SERVER(v1形式: nezha.xxx.com:8008  v0形式：nezha.xxx.com)
      - NEZHA_PORT(V1哪吒没有这个)
      - NEZHA_KEY(v1的NZ_CLIENT_SECRET或v0的agent密钥)
-     - CFIP(优选域名或优选ip)
-     - CFPORT(优选域名或优选ip对应端口)
+     - CFIP(优选域名或优选ip),使用直连镜像时没有此变量
+     - CFPORT(优选域名或优选ip对应端口),使用直连镜像时没有此变量
 
 6. **开始部署**
 * 在GitHub仓库的Actions页面找到"自动部署SAP"工作流
