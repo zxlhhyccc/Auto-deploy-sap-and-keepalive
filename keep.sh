@@ -3,9 +3,6 @@
 # 环境变量配置
 EMAIL="xxxxx@xxxx.com"   # 登录邮箱
 PASSWORD="xxxxxxxxx"     # 登录密码
-SG_ORG="xxxxtrial"       # SG组织名称
-US_ORG=""                # US组织名称
-SPACE="dev" # 多区请使用同样的空间名称
 
 # 要保活的URL列表,多个用英文空格分隔
 URLS="https://xxxx.cfapps.ap21.hana.ondemand.com https://xxxx.cfapps.us10-001.hana.ondemand.com"  
@@ -82,6 +79,35 @@ install_cf_cli() {
     fi
 }
 
+# 自动获取组织和空间信息
+get_org_and_space() {
+    # 确保已登录
+    if ! cf target >/dev/null 2>&1; then
+        red "未登录到CF，无法获取组织和空间信息"
+        return 1
+    fi
+    
+    # 获取组织列表并选择第一个
+    ORGS=$(cf orgs | sed -n '4p')
+    if [ -z "$ORGS" ]; then
+        red "未找到任何组织"
+        return 1
+    fi
+    ORG=$(echo "$ORGS" | head -n 1)
+    green "自动获取到组织: $ORG"
+    
+    # 获取空间列表并选择第一个
+    SPACES=$(cf spaces | sed -n '4p')
+    if [ -z "$SPACES" ]; then
+        red "未找到任何空间"
+        return 1
+    fi
+    SPACE=$(echo "$SPACES" | head -n 1)
+    green "自动获取到空间: $SPACE"
+    
+    return 0
+}
+
 # 登录CF
 login_cf() {
     local region="$1"
@@ -90,11 +116,9 @@ login_cf() {
     case "$region" in
         "us")
             api_endpoint="https://api.cf.us10-001.hana.ondemand.com"
-            ORG=$US_ORG
             ;;
         "sg")
             api_endpoint="https://api.cf.ap21.hana.ondemand.com"
-            ORG=$SG_ORG
             ;;
         *)
             red "未知区域: $region"
@@ -103,13 +127,23 @@ login_cf() {
     esac
     
     green "登录到 $region 区域..."
-    cf login -a "$api_endpoint" -u "$EMAIL" -p "$PASSWORD" -o "$ORG" -s "$SPACE"
+    # 先登录
+    cf login -a "$api_endpoint" -u "$EMAIL" -p "$PASSWORD"
     
     # 检查登录是否成功
     if [ $? -ne 0 ]; then
         red "登录失败"
         return 1
     fi
+    
+    # 自动获取组织和空间
+    if ! get_org_and_space; then
+        red "获取组织和空间信息失败"
+        return 1
+    fi
+    
+    # 设置目标组织和空间
+    cf target -o "$ORG" -s "$SPACE"
     
     return 0
 }
@@ -231,7 +265,6 @@ add_cron_job() {
         green "计划任务已存在，跳过添加计划任务"
     fi
 }
-
 
 # 主函数
 main() {
