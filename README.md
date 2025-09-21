@@ -22,7 +22,7 @@
 
 4. **设置Docker容器环境变量(也是在secrets里设置)**
    - DOCKER_IMAGE(使用的docker镜像),默认使用argo隧道，直连镜像可以使用`ghcr.io/eooce/goxhttp:latest`或`ghcr.io/eooce/ws:latest`
-   - 使用固定隧道token部署，请在cloudflare里设置端口为8001：
+   - 使用固定隧道token部署，请在cloudflare里设置端口为8001
    - 设置基础环境变量：
      - UUID(节点uuid),如果开启了哪吒v1,部署完一个之后一定要修改UUID,否则agnet会被覆盖
      - ARGO_DOMAIN(固定隧道域名,未设置将使用临时隧道),使用直连镜像时没有此变量
