@@ -26,7 +26,7 @@ on:
 
 env:
   DOCKER_IMAGE: ${{ secrets.DOCKER_IMAGE || 'ghcr.io/eooce/nodejs:main' }}
-  MEMORY: 512M
+  MEMORY: 256M
 
 jobs:
   deploy-app:
