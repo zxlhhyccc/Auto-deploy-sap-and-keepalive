@@ -56,7 +56,7 @@
 ```bash
 wget https://raw.githubusercontent.com/eooce/Auto-deploy-sap-and-keepalive/refs/heads/main/keep.sh && chmod +x keep.sh
 ```
-2. 修改keep.sh开头4-11行中的变量和保活url
+2. 修改keep.sh开头4-8行中的变量和保活url
 3. `bash keep.sh`运行即可
 
 
