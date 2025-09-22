@@ -17,8 +17,8 @@
 2. 在Actions菜单允许 `I understand my workflows, go ahead and enable them` 按钮
 
 3. 在 GitHub 仓库中设置以下 secrets（Settings → Secrets and variables → Actions → New repository secret）：
-- `EMAIL`: Cloud Foundry账户邮箱
-- `PASSWORD`: Cloud Foundry账户密码
+- `EMAIL`: Cloud Foundry账户邮箱(必填)
+- `PASSWORD`: Cloud Foundry账户密码(必填)
 
 4. **设置Docker容器环境变量(也是在secrets里设置)**
    - DOCKER_IMAGE(使用的docker镜像),默认使用argo隧道，直连镜像可以使用`ghcr.io/eooce/goxhttp:latest`或`ghcr.io/eooce/ws:latest`
@@ -45,11 +45,11 @@
 * 点击绿色的"Run workflow"按钮开始部署
 
 6. **获取节点信息**
-* 点开运行的actions，点击Deploy application，找到routes: 后面的域名
+* 点开运行的actions，点击`详细部署信息` 查看服务链接，访问域名显示Hello world说明正常
 * 订阅： 域名/$SUB_PATH    SUB_PATH变量没设置默认是sub  即订阅为：域名/sub
 
 
-## 保活 
+## 保活(选择其中一种即可)
 ### vps或NAT小鸡保活
 - 推荐使用keep.sh在vps或nat小鸡上精准保活，下载keep.sh文件到本地或vps上，在开头添加必要的环境变量和保活url然后执行`bash keep.sh`即可
 1. 下载文件到vps或本地
