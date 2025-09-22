@@ -14,11 +14,44 @@ on:
       region:
         description: '选择部署区域'
         required: true
-        default: 'SG'
+        default: 'AWS-SG(Singapore)'
         type: choice
         options:
-          - SG  # 新加坡
-          - US  # 美国
+          #  免费区域
+          - SG(free)  # azure新加披
+          - US(free)  # aws美国    
+          # AWS 区域
+          - AWS-AU(Sydney)
+          - AWS-BR(São Paulo)
+          - AWS-KR(Seoul)
+          - AWS-CA(Montreal)
+          - AWS-US(VA)
+          - AWS-US(OR)
+          - AWS-EU(Frankfurt)
+          - AWS-JP(Tokyo)
+          - AWS-SG(Singapore)
+          # GCP 区域
+          - GCP-AU(Sydney)
+          - GCP-BR(São Paulo)
+          - GCP-US(IA)
+          - GCP-EU(Frankfurt)
+          - GCP-JP(Osaka)
+          - GCP-JP(Tokyo)
+          - GCP-IL(Tel Aviv)
+          - GCP-IN(Mumbai)
+          - GCP-KSA(Dammam)
+          # Azure 区域
+          - Azure-AU(Sydney)
+          - Azure-BR(São Paulo)
+          - Azure-CA(Montreal)
+          - Azure-US(VA)
+          - Azure-US(WA)
+          - Azure-EU(Netherlands)
+          - Azure-JP(Tokyo)
+          - Azure-SG(Singapore)
+          # SAP Neo 区域
+          - Neo-UAE(Dubai)
+          - Neo-KSA(Riyadh)
       app_name:
         description: '应用名称（可选，留空则自动生成）'
         required: false
@@ -46,22 +79,143 @@ jobs:
 
     - name: Determine CF API endpoint and app name
       run: |
-        # 设置API端点
-        if [ "${{ github.event.inputs.region }}" = "SG" ]; then
-          echo "CF_API=https://api.cf.ap21.hana.ondemand.com" >> $GITHUB_ENV
-          RANDOM_STR=$(head /dev/urandom | tr -dc 'a-z' | head -c 6)
-          DEFAULT_APP_NAME="sg$RANDOM_STR"
-        elif [ "${{ github.event.inputs.region }}" = "US" ]; then
-          echo "CF_API=https://api.cf.us10-001.hana.ondemand.com" >> $GITHUB_ENV
-          RANDOM_STR=$(head /dev/urandom | tr -dc 'a-z' | head -c 6)
-          DEFAULT_APP_NAME="us$RANDOM_STR"
-        fi
+        # 设置API端点和生成随机字符串
+        RANDOM_STR=$(head /dev/urandom | tr -dc 'a-z' | head -c 6)
         
-        # 设置应用名称（如果用户提供了则使用，否则使用默认）
+        case "${{ github.event.inputs.region }}" in
+          # 免费区域
+          "SG(free)")
+            echo "CF_API=https://api.cf.ap21.hana.ondemand.com" >> $GITHUB_ENV
+            echo "APP_NAME=au$RANDOM_STR" >> $GITHUB_ENV
+            ;;
+          "US(free)")
+            echo "CF_API=https://api.cf.us10-001.hana.ondemand.co" >> $GITHUB_ENV
+            echo "APP_NAME=br$RANDOM_STR" >> $GITHUB_ENV
+            ;;
+          # AWS 区域
+          "AWS-AU(Sydney)")
+            echo "CF_API=https://api.cf.ap10.hana.ondemand.com" >> $GITHUB_ENV
+            echo "APP_NAME=au$RANDOM_STR" >> $GITHUB_ENV
+            ;;
+          "AWS-BR(São Paulo)")
+            echo "CF_API=https://api.cf.br10.hana.ondemand.com" >> $GITHUB_ENV
+            echo "APP_NAME=br$RANDOM_STR" >> $GITHUB_ENV
+            ;;
+          "AWS-KR(Seoul)")
+            echo "CF_API=https://api.cf.ap12.hana.ondemand.com" >> $GITHUB_ENV
+            echo "APP_NAME=kr$RANDOM_STR" >> $GITHUB_ENV
+            ;;
+          "AWS-CA(Montreal)")
+            echo "CF_API=https://api.cf.ca10.hana.ondemand.com" >> $GITHUB_ENV
+            echo "APP_NAME=ca$RANDOM_STR" >> $GITHUB_ENV
+            ;;
+          "AWS-US(VA)")
+            echo "CF_API=https://api.cf.us10.hana.ondemand.com" >> $GITHUB_ENV
+            echo "APP_NAME=usva$RANDOM_STR" >> $GITHUB_ENV
+            ;;
+          "AWS-US(OR)")
+            echo "CF_API=https://api.cf.us11.hana.ondemand.com" >> $GITHUB_ENV
+            echo "APP_NAME=usor$RANDOM_STR" >> $GITHUB_ENV
+            ;;
+          "AWS-EU(Frankfurt)")
+            echo "CF_API=https://api.cf.eu10.hana.ondemand.com" >> $GITHUB_ENV
+            echo "APP_NAME=eu$RANDOM_STR" >> $GITHUB_ENV
+            ;;
+          "AWS-JP(Tokyo)")
+            echo "CF_API=https://api.cf.jp10.hana.ondemand.com" >> $GITHUB_ENV
+            echo "APP_NAME=jp$RANDOM_STR" >> $GITHUB_ENV
+            ;;
+          "AWS-SG(Singapore)")
+            echo "CF_API=https://api.cf.ap11.hana.ondemand.com" >> $GITHUB_ENV
+            echo "APP_NAME=sg$RANDOM_STR" >> $GITHUB_ENV
+            ;;
+          
+          # GCP 区域
+          "GCP-AU(Sydney)")
+            echo "CF_API=https://api.cf.ap30.hana.ondemand.com" >> $GITHUB_ENV
+            echo "APP_NAME=gcau$RANDOM_STR" >> $GITHUB_ENV
+            ;;
+          "GCP-BR(São Paulo)")
+            echo "CF_API=https://api.cf.br30.hana.ondemand.com" >> $GITHUB_ENV
+            echo "APP_NAME=gcbr$RANDOM_STR" >> $GITHUB_ENV
+            ;;
+          "GCP-US(IA)")
+            echo "CF_API=https://api.cf.us30.hana.ondemand.com" >> $GITHUB_ENV
+            echo "APP_NAME=gcus$RANDOM_STR" >> $GITHUB_ENV
+            ;;
+          "GCP-EU(Frankfurt)")
+            echo "CF_API=https://api.cf.eu30.hana.ondemand.com" >> $GITHUB_ENV
+            echo "APP_NAME=gceu$RANDOM_STR" >> $GITHUB_ENV
+            ;;
+          "GCP-JP(Osaka)")
+            echo "CF_API=https://api.cf.jp30.hana.ondemand.com" >> $GITHUB_ENV
+            echo "APP_NAME=gcjo$RANDOM_STR" >> $GITHUB_ENV
+            ;;
+          "GCP-JP(Tokyo)")
+            echo "CF_API=https://api.cf.jp31.hana.ondemand.com" >> $GITHUB_ENV
+            echo "APP_NAME=gcjt$RANDOM_STR" >> $GITHUB_ENV
+            ;;
+          "GCP-IL(Tel Aviv)")
+            echo "CF_API=https://api.cf.il30.hana.ondemand.com" >> $GITHUB_ENV
+            echo "APP_NAME=gcil$RANDOM_STR" >> $GITHUB_ENV
+            ;;
+          "GCP-IN(Mumbai)")
+            echo "CF_API=https://api.cf.in30.hana.ondemand.com" >> $GITHUB_ENV
+            echo "APP_NAME=gcin$RANDOM_STR" >> $GITHUB_ENV
+            ;;
+          "GCP-KSA(Dammam)")
+            echo "CF_API=https://api.cf.sa31.hana.ondemand.com" >> $GITHUB_ENV
+            echo "APP_NAME=gcsa$RANDOM_STR" >> $GITHUB_ENV
+            ;;
+          
+          # Azure 区域
+          "Azure-AU(Sydney)")
+            echo "CF_API=https://api.cf.ap20.hana.ondemand.com" >> $GITHUB_ENV
+            echo "APP_NAME=azau$RANDOM_STR" >> $GITHUB_ENV
+            ;;
+          "Azure-BR(São Paulo)")
+            echo "CF_API=https://api.cf.br20.hana.ondemand.com" >> $GITHUB_ENV
+            echo "APP_NAME=azbr$RANDOM_STR" >> $GITHUB_ENV
+            ;;
+          "Azure-CA(Montreal)")
+            echo "CF_API=https://api.cf.ca20.hana.ondemand.com" >> $GITHUB_ENV
+            echo "APP_NAME=azca$RANDOM_STR" >> $GITHUB_ENV
+            ;;
+          "Azure-US(VA)")
+            echo "CF_API=https://api.cf.us21.hana.ondemand.com" >> $GITHUB_ENV
+            echo "APP_NAME=azva$RANDOM_STR" >> $GITHUB_ENV
+            ;;
+          "Azure-US(WA)")
+            echo "CF_API=https://api.cf.us20.hana.ondemand.com" >> $GITHUB_ENV
+            echo "APP_NAME=azwa$RANDOM_STR" >> $GITHUB_ENV
+            ;;
+          "Azure-EU(Netherlands)")
+            echo "CF_API=https://api.cf.eu20.hana.ondemand.com" >> $GITHUB_ENV
+            echo "APP_NAME=azeu$RANDOM_STR" >> $GITHUB_ENV
+            ;;
+          "Azure-JP(Tokyo)")
+            echo "CF_API=https://api.cf.jp20.hana.ondemand.com" >> $GITHUB_ENV
+            echo "APP_NAME=azjp$RANDOM_STR" >> $GITHUB_ENV
+            ;;
+          "Azure-SG(Singapore)")
+            echo "CF_API=https://api.cf.ap21.hana.ondemand.com" >> $GITHUB_ENV
+            echo "APP_NAME=azsg$RANDOM_STR" >> $GITHUB_ENV
+            ;;
+          
+          # SAP Neo 区域
+          "Neo-UAE(Dubai)")
+            echo "CF_API=https://api.cf.neo-ae1.hana.ondemand.com" >> $GITHUB_ENV
+            echo "APP_NAME=neouae$RANDOM_STR" >> $GITHUB_ENV
+            ;;
+          "Neo-KSA(Riyadh)")
+            echo "CF_API=https://api.cf.neo-sa1.hana.ondemand.com" >> $GITHUB_ENV
+            echo "APP_NAME=neoksa$RANDOM_STR" >> $GITHUB_ENV
+            ;;
+        esac
+        
+        # 如果用户提供了应用名称，则使用用户提供的
         if [ -n "${{ github.event.inputs.app_name }}" ]; then
           echo "APP_NAME=${{ github.event.inputs.app_name }}" >> $GITHUB_ENV
-        else
-          echo "APP_NAME=$DEFAULT_APP_NAME" >> $GITHUB_ENV
         fi
         
         echo "使用API端点: $CF_API"
@@ -69,7 +223,6 @@ jobs:
 
     - name: Login to Cloud Foundry
       run: |
-
         cf login -a ${{ env.CF_API }} -u "${{ secrets.EMAIL }}" -p "${{ secrets.PASSWORD }}"
 
         # 获取组织列表
