@@ -72,7 +72,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y cf8-cli
 
-    - name: Set environment variables
+    - name: Set API endpoint
       run: |
         case "${{ github.event.inputs.region }}" in
           # 免费区域
@@ -178,26 +178,62 @@ jobs:
 
     - name: Login to Cloud Foundry
       run: |
+        # 登录到 Cloud Foundry
         cf login -a ${{ env.CF_API }} -u "${{ secrets.EMAIL }}" -p "${{ secrets.PASSWORD }}"
 
-        # 获取组织列表
-        ORG=$(cf orgs | sed -n '4p')
+    - name: Get organization and space
+      id: get-org-space
+      run: |
+        # 获取组织列表 - 使用更可靠的方法
+        ORG=$(cf orgs | tail -n 1)
+        if [ -z "$ORG" ]; then
+          # 如果上述方法失败，尝试其他方法
+          ORG=$(cf orgs | grep -v "Getting orgs" | grep -v "name" | grep -v "^$" | head -n 1)
+        fi
+        
+        if [ -z "$ORG" ]; then
+          echo "错误：未找到任何组织"
+          exit 1
+        fi
         echo "Selected org: $ORG"
         echo "ORG=$ORG" >> $GITHUB_ENV
 
-        # 获取空间列表
-        SPACE=$(cf spaces | sed -n '4p')
+        # 切换到该组织
+        cf target -o "$ORG"
+
+        # 获取空间列表 - 使用更可靠的方法
+        SPACE=$(cf spaces | tail -n 1)
+        if [ -z "$SPACE" ]; then
+          # 如果上述方法失败，尝试其他方法
+          SPACE=$(cf spaces | grep -v "Getting spaces" | grep -v "name" | grep -v "^$" | head -n 1)
+        fi
+        
+        if [ -z "$SPACE" ]; then
+          echo "错误：未找到任何空间"
+          exit 1
+        fi
         echo "Selected space: $SPACE"
         echo "SPACE=$SPACE" >> $GITHUB_ENV
 
-        # 使用获取的组织和空间重新登录
-        cf login -a ${{ env.CF_API }} -u "${{ secrets.EMAIL }}" -p "${{ secrets.PASSWORD }}" -o "$ORG" -s "$SPACE"
+        # 切换到该空间
+        cf target -s "$SPACE"
+
+    - name: Verify target
+      run: |
+        echo "当前目标:"
+        cf target
 
     - name: 获取所有应用
       id: get-apps
       run: |
-        # 获取所有应用名称（跳过前 3 行提示和表头）
-        apps=$(cf apps | awk 'NR>3 {print $1}' | grep -v '^$')
+        # 获取所有应用名称 - 使用更可靠的方法
+        apps=$(cf apps | awk 'NR>3 {if (NF>0) print $1}' | grep -v '^$')
+        
+        # 如果上述方法失败，尝试其他方法
+        if [ -z "$apps" ]; then
+          apps=$(cf apps | tail -n +4 | awk '{print $1}' | grep -v '^$')
+        fi
+        
         echo "发现的应用:"
         echo "$apps"
         
@@ -211,9 +247,10 @@ jobs:
         fi
         
         # 直接输出到 GITHUB_OUTPUT（多行字符串）
-        echo "apps<<EOF" >> $GITHUB_OUTPUT
+        delimiter="EOF_$(date +%s)"
+        echo "apps<<$delimiter" >> $GITHUB_OUTPUT
         echo "$apps" >> $GITHUB_OUTPUT
-        echo "EOF" >> $GITHUB_OUTPUT
+        echo "$delimiter" >> $GITHUB_OUTPUT
 
     - name: 删除所有应用
       if: steps.get-apps.outputs.has_apps == 'true'
@@ -228,12 +265,16 @@ jobs:
         for app in $apps; do
           echo "正在删除应用: $app"
           cf delete -f -r "$app"  # -f 强制删除，不需要确认；-r 同时删除关联的路由
-          echo "应用 $app 删除成功"
+          if [ $? -eq 0 ]; then
+            echo "应用 $app 删除成功"
+          else
+            echo "应用 $app 删除失败，继续下一个应用"
+          fi
           echo "----------------------------------------"
-          sleep 10  # 每个应用之间等待 10 秒
+          sleep 5  # 每个应用之间等待 5 秒
         done
 
     - name: 验证应用已删除
       run: |
         echo "区域 ${{ github.event.inputs.region }} 中剩余的应用:"
-        cf apps
+        cf apps || echo "获取应用列表失败，可能已经没有应用"
