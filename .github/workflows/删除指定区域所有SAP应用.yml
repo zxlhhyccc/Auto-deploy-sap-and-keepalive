@@ -176,64 +176,41 @@ jobs:
             ;;
         esac
 
-    - name: Login to Cloud Foundry
+    - name: 基础登录到Cloud Foundry
       run: |
-        # 登录到 Cloud Foundry
+        # 基础登录（不带组织和空间）
         cf login -a ${{ env.CF_API }} -u "${{ secrets.EMAIL }}" -p "${{ secrets.PASSWORD }}"
 
-    - name: Get organization and space
-      id: get-org-space
+    - name: 获取组织和空间
       run: |
-        # 获取组织列表 - 使用更可靠的方法
-        ORG=$(cf orgs | tail -n 1)
-        if [ -z "$ORG" ]; then
-          # 如果上述方法失败，尝试其他方法
-          ORG=$(cf orgs | grep -v "Getting orgs" | grep -v "name" | grep -v "^$" | head -n 1)
-        fi
-        
+        # 获取组织列表
+        ORG=$(cf orgs | sed -n '4p')
+        echo "获取到的组织: $ORG"
         if [ -z "$ORG" ]; then
           echo "错误：未找到任何组织"
           exit 1
         fi
-        echo "Selected org: $ORG"
         echo "ORG=$ORG" >> $GITHUB_ENV
 
-        # 切换到该组织
-        cf target -o "$ORG"
-
-        # 获取空间列表 - 使用更可靠的方法
-        SPACE=$(cf spaces | tail -n 1)
-        if [ -z "$SPACE" ]; then
-          # 如果上述方法失败，尝试其他方法
-          SPACE=$(cf spaces | grep -v "Getting spaces" | grep -v "name" | grep -v "^$" | head -n 1)
-        fi
-        
+        # 获取空间列表
+        SPACE=$(cf spaces | sed -n '4p')
+        echo "获取到的空间: $SPACE"
         if [ -z "$SPACE" ]; then
           echo "错误：未找到任何空间"
           exit 1
         fi
-        echo "Selected space: $SPACE"
         echo "SPACE=$SPACE" >> $GITHUB_ENV
 
-        # 切换到该空间
-        cf target -s "$SPACE"
-
-    - name: Verify target
+    - name: 登录到指定组织和空间
       run: |
-        echo "当前目标:"
-        cf target
+        # 使用获取的组织和空间重新登录
+        cf login -a ${{ env.CF_API }} -u "${{ secrets.EMAIL }}" -p "${{ secrets.PASSWORD }}" -o "${{ env.ORG }}" -s "${{ env.SPACE }}"
 
     - name: 获取所有应用
       id: get-apps
       run: |
-        # 获取所有应用名称 - 使用更可靠的方法
-        apps=$(cf apps | awk 'NR>3 {if (NF>0) print $1}' | grep -v '^$')
-        
-        # 如果上述方法失败，尝试其他方法
-        if [ -z "$apps" ]; then
-          apps=$(cf apps | tail -n +4 | awk '{print $1}' | grep -v '^$')
-        fi
-        
+        # 获取所有应用名称（使用你的方法）
+        apps=$(cf apps | tail -n +4 | awk '{print $1}' | grep -v '^$')
         echo "发现的应用:"
         echo "$apps"
         
