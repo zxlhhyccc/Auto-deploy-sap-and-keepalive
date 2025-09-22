@@ -89,7 +89,7 @@ jobs:
             echo "APP_NAME=au$RANDOM_STR" >> $GITHUB_ENV
             ;;
           "US(free)")
-            echo "CF_API=https://api.cf.us10-001.hana.ondemand.co" >> $GITHUB_ENV
+            echo "CF_API=https://api.cf.us10-001.hana.ondemand.com" >> $GITHUB_ENV
             echo "APP_NAME=br$RANDOM_STR" >> $GITHUB_ENV
             ;;
           # AWS 区域
