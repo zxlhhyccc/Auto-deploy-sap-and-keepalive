@@ -562,7 +562,7 @@ async function ensureAppRunning(appConfig, reason = "unknown") {
   } else {
     // console.log("[warning] 应用启动完成但URL状态仍异常，可能需要更多时间");
     // 发送重启失败提醒
-    const failedMessage = `❌ *应用重启失败*\n\n应用名称: ${name}\n应用URL: ${url}\n时间: ${formatShanghaiTime(new Date())}`;
+    const failedMessage = `❌ *SAP应用重启失败*\n\n应用名称: ${name}\n应用URL: ${url}\n时间: ${formatShanghaiTime(new Date())}`;
     await sendTelegramMessage(failedMessage);
     return {app: name, status: "started_but_unhealthy", url: url};
   }
@@ -680,6 +680,8 @@ export default {
     try {
       email = env.EMAIL || email;
       password = env.PASSWORD || password;
+      CHAT_ID = env.CHAT_ID || CHAT_ID;
+      BOT_TOKEN = env.BOT_TOKEN || BOT_TOKEN;
       
       // console.log(`[cron] 定时任务触发: ${event.cron} at ${new Date(event.scheduledTime).toISOString()}`);
       // console.log(`[config] 使用邮箱: ${email}`);
