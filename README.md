@@ -40,7 +40,7 @@
 * 在GitHub仓库的Actions页面找到"自动部署SAP"工作流
 * 点击"Run workflow"按钮
 * 根据需要选择或填写以下参数：
-   - environment: 选择部署环境（staging/production）
+   - environment: 选择部署环境（production/staging）默认即可
    - region: 选择部署区域（SG(free)和US(free)为试用版,其他为企业版，请选择和开设的平台对应,aws,gcp,azure）
    - app_name: （可选）指定应用名称,留空随机生成
 * 点击绿色的"Run workflow"按钮开始部署
