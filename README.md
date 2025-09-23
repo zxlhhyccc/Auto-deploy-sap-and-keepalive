@@ -36,6 +36,7 @@
      - CFPORT(优选域名或优选ip对应端口),使用直连镜像时没有此变量
 
 6. **开始部署**
+* 试用版第二区域和企业版创建区域后,请一定要创建一个空间,名称随意,否则无法运行
 * 在GitHub仓库的Actions页面找到"自动部署SAP"工作流
 * 点击"Run workflow"按钮
 * 根据需要选择或填写以下参数：
@@ -75,4 +76,5 @@ wget https://raw.githubusercontent.com/eooce/Auto-deploy-sap-and-keepalive/refs/
 
 1. 确保所有必需的GitHub Secrets已正确配置
 2. 多区域部署需先开通权限，确保US区域有内存
+3. 试用版第二区域和企业版创建区域后,请一定要创建一个空间,名称随意,否则无法运行
 4. 建议设置SUB_PATH订阅token,防止节点泄露
