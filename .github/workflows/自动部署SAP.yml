@@ -110,7 +110,7 @@ jobs:
             echo "APP_NAME=ca$RANDOM_STR" >> $GITHUB_ENV
             ;;
           "AWS-US(VA)")
-            echo "CF_API=https://api.cf.us10.hana.ondemand.com" >> $GITHUB_ENV
+            echo "CF_API=https://api.cf.us10-001.hana.ondemand.com" >> $GITHUB_ENV
             echo "APP_NAME=usva$RANDOM_STR" >> $GITHUB_ENV
             ;;
           "AWS-US(OR)")
@@ -118,7 +118,7 @@ jobs:
             echo "APP_NAME=usor$RANDOM_STR" >> $GITHUB_ENV
             ;;
           "AWS-EU(Frankfurt)")
-            echo "CF_API=https://api.cf.eu10.hana.ondemand.com" >> $GITHUB_ENV
+            echo "CF_API=https://api.cf.eu10-005.hana.ondemand.com" >> $GITHUB_ENV
             echo "APP_NAME=eu$RANDOM_STR" >> $GITHUB_ENV
             ;;
           "AWS-JP(Tokyo)")
