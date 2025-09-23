@@ -41,8 +41,8 @@
 * 点击"Run workflow"按钮
 * 根据需要选择或填写以下参数：
    - environment: 选择部署环境（staging/production）
-   - region: 选择部署区域（SG/US）
-   - app_name: （可选）指定应用名称
+   - region: 选择部署区域（SG(free)和US(free)为试用版,其他为企业版，请选择和开设的平台对应,aws,gcp,azure）
+   - app_name: （可选）指定应用名称,留空随机生成
 * 点击绿色的"Run workflow"按钮开始部署
 
 6. **获取节点信息**
@@ -77,4 +77,5 @@ wget https://raw.githubusercontent.com/eooce/Auto-deploy-sap-and-keepalive/refs/
 1. 确保所有必需的GitHub Secrets已正确配置
 2. 多区域部署需先开通权限，确保US区域有内存
 3. 试用版第二区域和企业版创建区域后,请一定要创建一个空间,名称随意,否则无法运行
-4. 建议设置SUB_PATH订阅token,防止节点泄露
+4. 部署区域（SG(free)和US(free)为试用版,其他为企业版，请选择和开设的平台对应,aws,gcp,azure
+5. 建议设置SUB_PATH订阅token,防止节点泄露
