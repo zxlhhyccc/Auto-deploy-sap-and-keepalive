@@ -97,13 +97,13 @@ jobs:
             echo "CF_API=https://api.cf.ca10.hana.ondemand.com" >> $GITHUB_ENV
             ;;
           "AWS-US(VA)")
-            echo "CF_API=https://api.cf.us10.hana.ondemand.com" >> $GITHUB_ENV
+            echo "CF_API=https://api.cf.us10-001.hana.ondemand.com" >> $GITHUB_ENV
             ;;
           "AWS-US(OR)")
             echo "CF_API=https://api.cf.us11.hana.ondemand.com" >> $GITHUB_ENV
             ;;
           "AWS-EU(Frankfurt)")
-            echo "CF_API=https://api.cf.eu10.hana.ondemand.com" >> $GITHUB_ENV
+            echo "CF_API=https://api.cf.eu10-005.hana.ondemand.com" >> $GITHUB_ENV
             ;;
           "AWS-JP(Tokyo)")
             echo "CF_API=https://api.cf.jp10.hana.ondemand.com" >> $GITHUB_ENV
