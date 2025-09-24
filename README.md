@@ -2,7 +2,7 @@
 
 ## 概述
 
-本项目是自动部署argo节点到SAP Cloud Foundry平台，自动保活的方案
+本项目是自动部署argo隧道或直连节点到SAP Cloud Foundry平台，试用版并提供完美的自动保活的方案,并适配企业版部署，企业版无需保活
 - 视频教程：https://www.youtube.com/watch?v=uHvtVaeVCvE
 - telegram交流反馈群组：https://t.me/eooceu
 
