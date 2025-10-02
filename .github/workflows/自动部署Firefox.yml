@@ -246,7 +246,7 @@ jobs:
         cf app ${{ env.APP_NAME }}
         STATUS=$(cf app ${{ env.APP_NAME }} | grep "requested state:" | awk '{print $3}')
         if [ "$STATUS" = "started" ]; then
-          echo "✅ Moontv启动成功"
+          echo "✅ Firefox启动成功"
         else
           echo "❌ 应用启动失败，当前状态: $STATUS"
           echo "查看应用日志:"
