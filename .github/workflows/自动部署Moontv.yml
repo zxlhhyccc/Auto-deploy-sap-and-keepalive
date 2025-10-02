@@ -6,7 +6,7 @@ on:
       type:
         description: '选择部署的版本'
         required: true
-        default: 'Lunatv'
+        default: 'Moontv'
         type: choice
         options:
           - Lunatv
