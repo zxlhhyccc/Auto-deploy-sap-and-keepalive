@@ -244,7 +244,15 @@ jobs:
     - name: Verify deployment
       run: |
         cf app ${{ env.APP_NAME }}
-        echo "Deployment completed successfully!"
+        STATUS=$(cf app ${{ env.APP_NAME }} | grep "requested state:" | awk '{print $3}')
+        if [ "$STATUS" = "started" ]; then
+          echo "✅ Moontv启动成功"
+        else
+          echo "❌ 应用启动失败，当前状态: $STATUS"
+          echo "查看应用日志:"
+          cf logs ${{ env.APP_NAME }} --recent
+          exit 1
+        fi
     
     - name: 详细部署信息
       run: |
