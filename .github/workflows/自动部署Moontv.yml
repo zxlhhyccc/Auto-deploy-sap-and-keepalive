@@ -4,7 +4,7 @@ on:
   workflow_dispatch:  # 只允许手动触发
     inputs:
       type:
-        description: '选择部署的版本'
+        description: '选择部署的版本(Moontv自带源,Lunatv和KatelyaTV需手动配置源)'
         required: true
         default: 'Moontv'
         type: choice
@@ -54,7 +54,7 @@ on:
           - Neo-UAE(Dubai)
           - Neo-KSA(Riyadh)
       app_name:
-        description: '应用名称（可选，留空则自动生成）'
+        description: '应用名称(可选,留空则自动生成,被占用会部署失败)'
         required: false
         default: ''
 
@@ -264,9 +264,21 @@ jobs:
         
     - name: Verify deployment
       run: |
-        # 设置密码并重启后检查状态
-        cf set-env ${{ env.APP_NAME }} PASSWORD ${{ secrets.TV_PASSWORD || '123456'}}
+        # 设置环境变量
+        cf set-env ${{ env.APP_NAME }} USERNAME ${{ secrets.TV_USERNAME}}              # 用户名
+        cf set-env ${{ env.APP_NAME }} PASSWORD ${{ secrets.TV_PASSWORD || '123456'}}  # 密码
+        cf set-env ${{ env.APP_NAME }} SITE_BASE ${{ secrets.SITE_BASE}}               # 站点 url
+        cf set-env ${{ env.APP_NAME }} NEXT_PUBLIC_SITE_NAME ${{ secrets.NEXT_PUBLIC_SITE_NAME }} # 站点名称
+        cf set-env ${{ env.APP_NAME }} ANNOUNCEMENT ${{ secrets.ANNOUNCEMENT }}        # 站点公告
+        cf set-env ${{ env.APP_NAME }} NEXT_PUBLIC_STORAGE_TYPE ${{ secrets.NEXT_PUBLIC_STORAGE_TYPE }} # 存储方式：redis、kvrocks、upstash d1
+        cf set-env ${{ env.APP_NAME }} KVROCKS_URL ${{ secrets.KVROCKS_URL }}          # kvrocks 连接 url
+        cf set-env ${{ env.APP_NAME }} REDIS_URL ${{ secrets.REDIS_URL }}              # redis 连接 url
+        cf set-env ${{ env.APP_NAME }} UPSTASH_URL ${{ secrets.UPSTASH_URL }}          # upstash redis 连接 url
+        cf set-env ${{ env.APP_NAME }} UPSTASH_TOKEN ${{ secrets.UPSTASH_TOKEN }}      # upstash redis 连接 token
+        cf set-env ${{ env.APP_NAME }} NEXT_PUBLIC_DISABLE_YELLOW_FILTER ${{ secrets.NEXT_PUBLIC_DISABLE_YELLOW_FILTER || 'true'}} # 是否开启18+,默认开启
+        # 重启应用
         cf restage ${{ env.APP_NAME }}
+        # 检查应用状态
         STATUS=$(cf app ${{ env.APP_NAME }} | grep "requested state:" | awk '{print $3}')
         if [ "$STATUS" = "started" ]; then
           echo "✅ Moontv启动成功"
